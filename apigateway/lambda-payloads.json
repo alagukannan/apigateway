@@ -1,0 +1,19 @@
+{
+    "apigateway": {
+        "apigateway": {
+            "path": "/",
+            "method": {
+                "value": "GET",
+                "items": [
+                    "GET",
+                    "POST",
+                    "PUT",
+                    "DELETE",
+                    "HEAD",
+                    "OPTIONS",
+                    "PATCH"
+                ]
+            }
+        }
+    }
+}
