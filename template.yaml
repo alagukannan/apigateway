@@ -13,7 +13,7 @@ Resources:
       Timeout: 3
       Environment:
         Variables:
-          tier: AQICAHjAmbuG+u1S43eFDKTmzlVvigBfWugX9syzfdLGquWiAwEUTcRFWrs1xRbinZmCi/9OAAAAaDBmBgkqhkiG9w0BBwagWTBXAgEAMFIGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMibioT/xEZKTTKWk0AgEQgCXL2uLhpIpzsCqeWBF3tc8yL+H59socSjaBzMAskioY0N9mWGsn
+          tier: test
       Events:
         LambdaMicroservice:
           Type: Api
