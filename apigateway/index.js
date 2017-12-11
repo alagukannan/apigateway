@@ -33,7 +33,7 @@ exports.handler = (event, context, callback) => {
             dynamo.deleteItem(JSON.parse(event.body), done);
             break;
         case 'GET':
-            dynamo.scan({ TableName: event.queryStringParameters.TableName }, done);
+            done(null, process.env.tier);
             break;
         case 'POST':
             dynamo.putItem(JSON.parse(event.body), done);

@@ -9,13 +9,17 @@ Resources:
       Runtime: nodejs6.10
       Description: ''
       MemorySize: 128
-      Timeout: 15
+      Timeout: 3
+      Environment:
+        Variables:
+          tier: prod
       Events:
         LambdaMicroservice:
           Type: Api
           Properties:
             Path: /
             Method: ANY
+     AutoPublishAlias: newdeploy
   apigatewayPermission:
     Type: 'AWS::Lambda::Permission'
     Properties:
