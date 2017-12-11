@@ -1,47 +1,49 @@
 'use strict';
 
 console.log('Loading function');
+const AWS = require('aws-sdk');
+const encrypted = process.env['tier'];
+let decrypted;
 
-const doc = require('dynamodb-doc');
 
-const dynamo = new doc.DynamoDB();
-
-
-/**
- * Demonstrates a simple HTTP endpoint using API Gateway. You have full
- * access to the request and response payload, including headers and
- * status code.
- *
- * To scan a DynamoDB table, make a GET request with the TableName as a
- * query string parameter. To put, update, or delete an item, make a POST,
- * PUT, or DELETE request respectively, passing in the payload to the
- * DynamoDB API as a JSON body.
- */
-exports.handler = (event, context, callback) => {
-    //console.log('Received event:', JSON.stringify(event, null, 2));
-
-    const done = (err, res) => callback(null, {
+function processEvent(event, context, callback) {
+   const done = (err, res) => callback(null, {
         statusCode: err ? '400' : '200',
         body: err ? err.message : JSON.stringify(res),
         headers: {
             'Content-Type': 'application/json',
         },
     });
-
-    switch (event.httpMethod) {
-        case 'DELETE':
-            dynamo.deleteItem(JSON.parse(event.body), done);
-            break;
+     switch (event.httpMethod) {
         case 'GET':
-            done(null, process.env.tier);
-            break;
-        case 'POST':
-            dynamo.putItem(JSON.parse(event.body), done);
-            break;
-        case 'PUT':
-            dynamo.updateItem(JSON.parse(event.body), done);
+            done(null, {  'decrypted': decrypted});
             break;
         default:
             done(new Error(`Unsupported method "${event.httpMethod}"`));
     }
+}
+
+
+exports.handler = (event, context, callback) => {
+    //console.log('Received event:', JSON.stringify(event, null, 2));
+    
+
+   if (decrypted) {
+        processEvent(event, context, callback);
+    } else {
+        // Decrypt code should run once and variables stored outside of the function
+        // handler so that these are decrypted once per container
+        const kms = new AWS.KMS();
+        kms.decrypt({ CiphertextBlob: new Buffer(encrypted, 'base64') }, (err, data) => {
+            if (err) {
+                console.log('Decrypt error:', err);
+                return callback(err);
+            }
+            decrypted = data.Plaintext.toString('ascii');
+            processEvent(event, context, callback);
+        });
+    }
+
+
+  
 };

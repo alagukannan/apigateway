@@ -13,13 +13,15 @@ Resources:
       Timeout: 3
       Environment:
         Variables:
-          tier: prod
+          tier: AQICAHjAmbuG+u1S43eFDKTmzlVvigBfWugX9syzfdLGquWiAwEUTcRFWrs1xRbinZmCi/9OAAAAaDBmBgkqhkiG9w0BBwagWTBXAgEAMFIGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMibioT/xEZKTTKWk0AgEQgCXL2uLhpIpzsCqeWBF3tc8yL+H59socSjaBzMAskioY0N9mWGsn
       Events:
         LambdaMicroservice:
           Type: Api
           Properties:
             Path: /
-            Method: ANY
+            Method: GET
+      KmsKeyArn: 
+        'Fn::Sub': 'arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/mylambdaKMS'
   apigatewayPermission:
     Type: 'AWS::Lambda::Permission'
     Properties:
