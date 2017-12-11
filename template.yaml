@@ -7,6 +7,7 @@ Resources:
     Properties:
       Handler: apigateway/index.handler
       Runtime: nodejs6.10
+      AutoPublishAlias: newdeploy
       Description: ''
       MemorySize: 128
       Timeout: 3
@@ -19,7 +20,6 @@ Resources:
           Properties:
             Path: /
             Method: ANY
-     AutoPublishAlias: newdeploy
   apigatewayPermission:
     Type: 'AWS::Lambda::Permission'
     Properties:
